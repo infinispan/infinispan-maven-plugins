@@ -8,6 +8,48 @@
     <packaging>pom</packaging>
     <name>Parent</name>
     <description>Infinispan Maven Plugins Parent POM</description>
+    <url>https://github.com/infinispan/maven-plugins</url>
+
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>placeholder</id>
+            <name>See https://github.com/infinispan/maven-plugins/graphs/contributors for a complete list of
+                contributors
+            </name>
+        </developer>
+    </developers>
+
+    <ciManagement>
+        <system>Jenkins</system>
+        <url>https://ci.infinispan.org</url>
+    </ciManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>${jboss.releases.repo.id}</id>
+            <name>JBoss Release Repository</name>
+            <url>${jboss.releases.repo.url}</url>
+        </repository>
+    </distributionManagement>
+
+    <issueManagement>
+        <system>jira</system>
+        <url>https://issues.jboss.org/browse/ISPN</url>
+    </issueManagement>
+
+    <scm>
+        <connection>scm:git:git@github.com:infinispan/maven-plugins.git</connection>
+        <developerConnection>scm:git:git@github.com:infinispan/maven-plugins.git</developerConnection>
+        <url>https://github.com/infinispan/maven-plugins</url>
+    </scm>
 
     <modules>
         <module>protocol-parser-generator</module>
@@ -20,21 +62,14 @@
 
         <jboss.releases.repo.id>jboss-releases-repository</jboss.releases.repo.id>
         <jboss.releases.nexus.url>https://repository.jboss.org/nexus</jboss.releases.nexus.url>
-        <jboss.releases.repo.url>${jboss.releases.nexus.url}/service/local/staging/deploy/maven2/</jboss.releases.repo.url>
+        <jboss.releases.repo.url>${jboss.releases.nexus.url}/service/local/staging/deploy/maven2/
+        </jboss.releases.repo.url>
 
         <version.apache.maven>3.6.1</version.apache.maven>
         <version.maven.nexus-staging>1.6.8</version.maven.nexus-staging>
         <version.maven-plugin-plugin>3.6.0</version.maven-plugin-plugin>
         <version.os.maven-plugin>1.6.2</version.os.maven-plugin>
     </properties>
-
-    <distributionManagement>
-        <repository>
-            <id>${jboss.releases.repo.id}</id>
-            <name>JBoss Release Repository</name>
-            <url>${jboss.releases.repo.url}</url>
-        </repository>
-    </distributionManagement>
 
     <dependencyManagement>
         <dependencies>
