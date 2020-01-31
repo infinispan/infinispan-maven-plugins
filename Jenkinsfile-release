@@ -6,13 +6,9 @@ pipeline {
     }
 
     parameters {
-        string(name: 'version', defaultValue: '0.0.0.Qualifier', description: 'Release version')
-        string(name: 'nextVersion', defaultValue: '', description: 'Next release (blank to stay on current SNAPSHOT)')
-        string(name: 'branch_name', defaultValue: 'master', description: 'Branch to release from')
-    }
-
-    options {
-        timeout(time: 3, unit: 'HOURS')
+        string(name: 'version', defaultValue: '', description: 'Release version')
+        string(name: 'nextVersion', defaultValue: '', description: 'Next working version')
+        gitParameter(name: 'branch', defaultValue: 'origin/master', branchFilter: 'origin/(.*)', type: 'PT_BRANCH', description: 'Branch to release from')
     }
 
     stages {
@@ -20,11 +16,9 @@ pipeline {
             steps {
                 script {
                     env.MAVEN_HOME = tool('Maven')
-                    env.MAVEN_OPTS = "-Xmx800m -XX:+HeapDumpOnOutOfMemoryError"
+                    env.MAVEN_OPTS = "-Xmx1g -XX:+HeapDumpOnOutOfMemoryError"
                     env.JAVA_HOME = tool('JDK 11')
                 }
-
-                sh returnStdout: true, script: 'cleanup.sh'
             }
         }
 
@@ -36,31 +30,31 @@ pipeline {
 
         stage('Version') {
             steps {
-                sh "$MAVEN_HOME/bin/mvn -B -V versions:set -DnewVersion=${version}"
+                sh "$MAVEN_HOME/bin/mvn -B -V versions:set -DnewVersion=${params.version} -DprocessAllModules=true"
             }
         }
 
         stage('Deploy') {
             steps {
-                sh "$MAVEN_HOME/bin/mvn -B -V -DskipTests clean deploy"
+                configFileProvider([configFile(fileId: 'maven-settings-with-deploy-release', variable: 'MAVEN_SETTINGS')]) {
+                    sh "$MAVEN_HOME/bin/mvn -B -V -s '$MAVEN_SETTINGS' -DskipTests clean deploy"
+                }
             }
         }
 
         stage('Tag') {
             steps {
-                // Commit and tag once everything is good
-                sh "$MAVEN_HOME/bin/mvn -B -V scm:checkin -Dmessage=\"Releasing version ${version}\" -DpushChanges=false"
-                sh "$MAVEN_HOME/bin/mvn -B -V scm:tag"
+                sh "$MAVEN_HOME/bin/mvn -B -V scm:checkin -Dmessage=\"Releasing version ${params.version}\" -DpushChanges=false"
+                sh "$MAVEN_HOME/bin/mvn -B -V scm:tag -Dtag=${params.version}"
             }
         }
 
         stage('Next version') {
-            when {
-                expression { params.nextVersion != '' }
-            }
             steps {
-                sh "$MAVEN_HOME/bin/mvn -B -V versions:set -DnewVersion=${nextVersion}"
-                sh "$MAVEN_HOME/bin/mvn -B -V -Dmessage='next version ${nextVersion}' -DscmVersion=${branch_name} -DscmVersionType=branch scm:checkin"
+                script {
+                    sh "$MAVEN_HOME/bin/mvn -B -V versions:set -DnewVersion=${params.nextVersion} -DprocessAllModules=true"
+                    sh "$MAVEN_HOME/bin/mvn -B -V -Dmessage='Next version ${params.nextVersion}' -DscmVersion=${params.branch} -DscmVersionType=branch scm:checkin"
+                }
             }
         }
     }
