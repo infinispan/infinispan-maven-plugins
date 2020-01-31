@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.infinispan.maven-plugins</groupId>
         <artifactId>infinispan-plugins-parent</artifactId>
-        <version>1.0.2.Final</version>
+        <version>1.0.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
