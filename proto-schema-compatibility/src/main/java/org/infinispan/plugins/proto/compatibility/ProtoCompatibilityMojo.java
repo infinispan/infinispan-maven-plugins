@@ -74,8 +74,8 @@ public class ProtoCompatibilityMojo extends AbstractMojo {
 
          try (InputStream in = this.getClass().getClassLoader().getResourceAsStream(protolockResourcePath)) {
             if (in == null) {
-               throw new MojoExecutionException(
-                     "OS not supported. Unable to find a protolock binary for the classifier " + classifier);
+               getLog().warn(String.format("OS not supported. Unable to find a protolock binary for the classifier '%s'. Skipping compatibility check.", classifier));
+               return;
             }
 
             Files.copy(in, exePath);
