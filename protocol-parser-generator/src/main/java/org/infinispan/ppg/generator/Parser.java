@@ -107,6 +107,10 @@ public class Parser {
                parse(new File(file.getParentFile(), f), true);
                expectSemicolon(ctx);
                break;
+            case "beforedecode":
+               ctx.next("{");
+               grammar.beforeDecodeAction = new Action(ctx.ns, processCode(ctx), ctx.file, ctx.line);
+               break;
             case "init":
                ctx.next("{");
                grammar.initAction = new Action(ctx.ns, processCode(ctx), ctx.file, ctx.line);
