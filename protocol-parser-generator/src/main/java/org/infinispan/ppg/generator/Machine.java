@@ -18,19 +18,22 @@ public class Machine {
    private final String initAction;
    private final String exceptionally;
    private final String deadEnd;
+   private final String beforeDecode;
    private final int maxSwitchStates;
    private final int userSwitchThreshold;
    private final int switchShift;
    private final boolean passContext;
    private List<State> states = new ArrayList<>();
 
-   public Machine(String pkg, String simpleName, String baseClassName, String initAction, String exceptionally, String deadEnd, int maxSwitchStates, int userSwitchThreshold, boolean passContext) {
+   public Machine(String pkg, String simpleName, String baseClassName, String initAction, String exceptionally,
+         String deadEnd, String beforeDecode, int maxSwitchStates, int userSwitchThreshold, boolean passContext) {
       this.pkg = pkg;
       this.simpleName = simpleName;
       this.baseClassName = baseClassName;
       this.initAction = initAction;
       this.exceptionally = exceptionally;
       this.deadEnd = deadEnd;
+      this.beforeDecode = beforeDecode;
       this.maxSwitchStates = Integer.highestOneBit(maxSwitchStates - 1) << 1;
       this.userSwitchThreshold = userSwitchThreshold;
       this.switchShift = 32 - Integer.numberOfLeadingZeros(maxSwitchStates - 1);
@@ -74,6 +77,9 @@ public class Machine {
       sb.append("\tpublic void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> out) throws Exception {\n");
       sb.append("\t\tint pos = buf.readerIndex();\n");
       sb.append("\t\ttry {\n");
+      if (beforeDecode != null) {
+         sb.append(prettyPrint(beforeDecode, 3)).append("\n");
+      }
       sb.append("\t\t\twhile (switch").append(numLevels > 1 ? (numLevels - 1) + "_" : "").append("0(");
       if (passContext) sb.append("ctx, ");
       sb.append("buf));\n");

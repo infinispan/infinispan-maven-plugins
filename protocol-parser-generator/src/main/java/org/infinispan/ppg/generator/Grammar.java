@@ -17,6 +17,7 @@ public class Grammar {
    String simpleName;
    String baseClassName;
    RuleDefinition root;
+   Action beforeDecodeAction;
    Action initAction;
    Action exceptionally;
    Action deadEnd;
@@ -37,7 +38,9 @@ public class Grammar {
       Machine machine = new Machine(pkg, simpleName, baseClassName,
             initAction == null ? null : initAction.code(this),
             exceptionally == null ? null : exceptionally.code(this),
-            deadEnd == null ? null : deadEnd.code(this), maxSwitchStates, userSwitchThreshold, passContext);
+            deadEnd == null ? null : deadEnd.code(this),
+            beforeDecodeAction == null ? null : beforeDecodeAction.code(this),
+            maxSwitchStates, userSwitchThreshold, passContext);
       imports.forEach(machine::addImport);
 
       for (RuleDefinition rule : rules) {
