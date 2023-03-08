@@ -107,6 +107,7 @@ public class RuleDefinition implements Resolvable {
             throw new GeneratorException(file + ":" + line + ": rule " + qualifiedName + ": Branches analyzed to different types; " + commonType + " != " + branchType);
          }
       }
-      return commonType;
+      // This can be null if all branches are throw type
+      return commonType == null ? "void" : commonType;
    }
 }
