@@ -130,7 +130,7 @@ public class Machine {
          sb.append("\t}\n\n");
       }
       sb.append("\tprivate void reset() {\n");
-      sb.append("\t\trequestBytes = 0;");
+      sb.append("\t\trequestBytes = 0;\n");
       for (Map.Entry<String, String> var : variables.entrySet()) {
          sb.append("\t\t").append(var.getKey()).append(" = ").append(defaultFor(var.getValue())).append(";\n");
       }
