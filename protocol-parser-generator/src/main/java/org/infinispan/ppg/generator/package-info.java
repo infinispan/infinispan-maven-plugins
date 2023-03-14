@@ -61,10 +61,12 @@
  * Each rule may return a type; in such case the parser contains a field that will hold the result.
  * The type can be either stated explicitly using <code>returns</code> or is inferred automatically.
  * Automatic inference requires all of the branches to be of the same type. Type for branch can be inferred when:
- * <li>there is only single reference to another rule in the branch
- * <li>the last statement in branch is an action (see below) that starts with <code>new /type/</code>
- * <li>the last statement in branch is an action that contains a number (possibly suffixed with L)
- * <li>the last statement in branch is an action that starts with <code>throw</code>
+ * <ul>
+ * <li>there is only single reference to another rule in the branch</li>
+ * <li>the last statement in branch is an action (see below) that starts with <code>new /type/</code></li>
+ * <li>the last statement in branch is an action that contains a number (possibly suffixed with L)</li>
+ * <li>the last statement in branch is an action that starts with <code>throw</code></li>
+ * </ul>
  * <p>
  * All but the last branch must start with a sentinel predicate:<pre><code>
  * myRule
@@ -81,11 +83,13 @@
  * that can be used as the switch cases.
  * <p>
  * The branch elements is a space-separated list of:
- * <li>references to another rules
- * <li>byte values provided as decimal (e.g. <code>42</code>) or hexadecimal (e.g <code>0xFF</code>).
- * <li>constants with value 0..255
- * <li>actions: <code>{ /custom code/ }</code>
- * <li>loops: <code>#/reference/ ( /elements/ )</code>
+ * <ul>
+ * <li>references to another rules</li>
+ * <li>byte values provided as decimal (e.g. <code>42</code>) or hexadecimal (e.g <code>0xFF</code>).</li>
+ * <li>constants with value 0..255</li>
+ * <li>actions: <code>{ /custom code/ }</code></li>
+ * <li>loops: <code>#/reference/ ( /elements/ )</code></li>
+ * </ul>
  * <p>
  * Loops require some more explanation here: the reference after <code>#</code> is not matched,
  * it is expected to be already matched before. At this point its value is evaluated and if it's not equal to zero
