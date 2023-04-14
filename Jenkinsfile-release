@@ -37,7 +37,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 configFileProvider([configFile(fileId: 'maven-settings-with-deploy-release', variable: 'MAVEN_SETTINGS')]) {
-                    sh "$MAVEN_HOME/bin/mvn -B -V -s '$MAVEN_SETTINGS' -DskipTests clean deploy"
+                    sh "$MAVEN_HOME/bin/mvn -B -V -s '$MAVEN_SETTINGS' -Pcommunity-release -DskipTests clean deploy"
                 }
             }
         }
