@@ -166,6 +166,10 @@
                             <configuration>
                                 <keyname>${infinispan.gpg.key}</keyname>
                                 <passphraseServerId>${infinispan.gpg.key}</passphraseServerId>
+                                <gpgArguments>
+                                    <arg>--pinentry-mode</arg>
+                                    <arg>loopback</arg>
+                                </gpgArguments>
                             </configuration>
                         </execution>
                     </executions>
