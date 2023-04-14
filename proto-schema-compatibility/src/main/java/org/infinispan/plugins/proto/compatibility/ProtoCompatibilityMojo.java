@@ -48,7 +48,7 @@ public class ProtoCompatibilityMojo extends AbstractMojo {
    @Parameter(defaultValue = "${project.build.directory}/classes/proto", readonly = true)
    private String protoSourceRoot;
 
-   @Parameter(defaultValue = "false", readonly = true)
+   @Parameter(defaultValue = "false")
    private boolean commitProtoLock;
 
    /**
