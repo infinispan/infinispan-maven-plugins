@@ -82,7 +82,7 @@ public class Machine {
       }
       sb.append("\t\t\twhile (switch").append(numLevels > 1 ? (numLevels - 1) + "_" : "").append("0(");
       if (passContext) sb.append("ctx, ");
-      sb.append("buf));\n");
+      sb.append("buf, out));\n");
       sb.append("\t\t} catch (Throwable t) {\n");
       if (exceptionally == null) {
          sb.append("\t\t\tthrow t;\n");
@@ -107,7 +107,7 @@ public class Machine {
             if (passContext) {
                sb.append("ChannelHandlerContext ctx, ");
             }
-            sb.append("ByteBuf buf) throws Exception {\n");
+            sb.append("ByteBuf buf, List<Object> out) throws Exception {\n");
             sb.append("\t\tbyte b;\n");
             sb.append("\t\tint pos;\n");
             sb.append("\t\tswitch (state) {\n");
@@ -177,7 +177,7 @@ public class Machine {
       }
       sb.append("\tprivate boolean switch").append(level).append('_').append(offset).append('(');
       if (passContext) sb.append("ChannelHandlerContext ctx, ");
-      sb.append("ByteBuf buf) throws Exception {\n");
+      sb.append("ByteBuf buf, List<Object> out) throws Exception {\n");
       sb.append("\t\tswitch (state >> ").append(level * switchShift).append(") {\n");
       for (int s = 0; s < maxSwitchStates && ((s + offset) << (level * switchShift)) < states.size(); ++s) {
          sb.append("\t\tcase ").append(s).append(": return switch");
@@ -188,7 +188,7 @@ public class Machine {
          }
          sb.append('(');
          if (passContext) sb.append("ctx, ");
-         sb.append("buf);\n");
+         sb.append("buf, out);\n");
       }
       sb.append("\t\tdefault: throw new IllegalStateException();\n");
       sb.append("\t\t}\n\t}\n\n");
