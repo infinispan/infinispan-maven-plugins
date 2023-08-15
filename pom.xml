@@ -75,7 +75,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <version.apache.maven>3.6.1</version.apache.maven>
+        <version.apache.maven>3.8.1</version.apache.maven>
         <version.maven.gpg>3.0.1</version.maven.gpg>
         <version.maven.javadoc>3.5.0</version.maven.javadoc>
         <version.maven.nexus-staging>1.6.13</version.maven.nexus-staging>
