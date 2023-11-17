@@ -75,6 +75,7 @@ public class ProtoCompatibilityMojo extends AbstractMojo {
       }
 
       String classifier = mavenProject.getProperties().getProperty("os.detected.classifier");
+      getLog().info("Detected OS: " + classifier);
       String exeExtension = classifier.startsWith("windows") ? ".exe" : "";
       Path exePath = exeDirPath.resolve("protolock" + exeExtension);
       if (!Files.exists(exePath)) {
