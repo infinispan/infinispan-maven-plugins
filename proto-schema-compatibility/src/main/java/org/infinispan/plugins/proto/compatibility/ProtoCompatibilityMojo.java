@@ -51,12 +51,20 @@ public class ProtoCompatibilityMojo extends AbstractMojo {
    @Parameter(defaultValue = "false")
    private boolean commitProtoLock;
 
+   @Parameter(defaultValue = "false")
+   private boolean skip;
+
    /**
     * Execute the plugin.
     * @throws MojoExecutionException thrown when execution of protolock fails.
     * @throws MojoFailureException thrown when compatibility check fails.
     */
    public void execute() throws MojoExecutionException, MojoFailureException {
+      if (skip) {
+         getLog().info("Skipping protolock check");
+         return;
+      }
+
       Path exeDirPath = Paths.get(mavenProject.getBuild().getDirectory(), "protolock-bin");
       if (!Files.isDirectory(exeDirPath)) {
          try {
