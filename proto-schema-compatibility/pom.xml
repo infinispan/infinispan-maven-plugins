@@ -9,28 +9,29 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>proto-schema-compatibility</artifactId>
+    <artifactId>proto-schema-compatibility-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>Proto Schema Backwards Compatibility Plugin</name>
 
-    <properties>
-        <version.mojo-executor>2.2.0</version.mojo-executor>
-    </properties>
-
     <dependencies>
+        <dependency>
+            <groupId>org.infinispan.protostream</groupId>
+            <artifactId>protostream</artifactId>
+            <version>${version.protostream}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${version.jackson-databind}</version>
+        </dependency>
         <dependency>
             <groupId>org.twdata.maven</groupId>
             <artifactId>mojo-executor</artifactId>
             <version>${version.mojo-executor}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+        </dependency>
     </dependencies>
-
-    <build>
-        <extensions>
-            <extension>
-                <groupId>kr.motd.maven</groupId>
-                <artifactId>os-maven-plugin</artifactId>
-            </extension>
-        </extensions>
-    </build>
 </project>
