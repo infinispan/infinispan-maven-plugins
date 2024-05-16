@@ -12,6 +12,10 @@
     <artifactId>proto-schema-compatibility-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>Proto Schema Backwards Compatibility Plugin</name>
+    <description>
+        Compares .proto files against the previous version using the Protocol Buffers best practices
+        to determine whether they maintain backwards-compatibility
+    </description>
 
     <dependencies>
         <dependency>
@@ -27,6 +31,7 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
