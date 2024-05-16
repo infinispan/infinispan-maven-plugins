@@ -32,6 +32,31 @@
         <url>https://ci.infinispan.org</url>
     </ciManagement>
 
+    <properties>
+        <!-- maven repository urls -->
+        <maven.releases.nexus.url>https://s01.oss.sonatype.org/</maven.releases.nexus.url>
+        <maven.releases.repo.id>ossrh</maven.releases.repo.id>
+        <maven.releases.repo.url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</maven.releases.repo.url>
+        <maven.snapshots.repo.id>ossrh</maven.snapshots.repo.id>
+        <maven.snapshots.repo.url>https://s01.oss.sonatype.org/content/repositories/snapshots</maven.snapshots.repo.url>
+
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.release>17</maven.compiler.release>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <version.jackson-databind>2.16.2</version.jackson-databind>
+        <version.maven.api>3.9.0</version.maven.api>
+        <version.maven.gpg>3.2.4</version.maven.gpg>
+        <version.maven.javadoc>3.6.3</version.maven.javadoc>
+        <version.maven.nexus-staging>1.6.13</version.maven.nexus-staging>
+        <version.maven.plugin-tools>3.13.0</version.maven.plugin-tools>
+        <version.netty>4.1.109.Final</version.netty>
+        <version.protostream>5.0.4.Final</version.protostream>
+    </properties>
+
     <distributionManagement>
         <snapshotRepository>
             <id>${maven.snapshots.repo.id}</id>
@@ -59,53 +84,24 @@
         <module>proto-schema-compatibility</module>
     </modules>
 
-    <properties>
-        <!-- maven repository urls -->
-        <maven.releases.nexus.url>https://s01.oss.sonatype.org/</maven.releases.nexus.url>
-        <maven.releases.repo.id>ossrh</maven.releases.repo.id>
-        <maven.releases.repo.url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</maven.releases.repo.url>
-        <maven.snapshots.repo.id>ossrh</maven.snapshots.repo.id>
-        <maven.snapshots.repo.url>https://s01.oss.sonatype.org/content/repositories/snapshots</maven.snapshots.repo.url>
-
-        <infinispan.gpg.key>9E31AB27445478DB</infinispan.gpg.key>
-
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <maven.compiler.release>17</maven.compiler.release>
-
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-        <version.apache.maven>3.9.6</version.apache.maven>
-        <version.jackson-databind>2.16.2</version.jackson-databind>
-        <version.maven.gpg>3.2.4</version.maven.gpg>
-        <version.maven.javadoc>3.6.3</version.maven.javadoc>
-        <version.maven.nexus-staging>1.6.13</version.maven.nexus-staging>
-        <version.maven-plugin-plugin>3.13.0</version.maven-plugin-plugin>
-        <version.maven.scm-plugin>2.1.0</version.maven.scm-plugin>
-        <version.mojo-executor>2.4.0</version.mojo-executor>
-        <version.netty>4.1.109.Final</version.netty>
-        <version.protostream>5.0.4.Final</version.protostream>
-    </properties>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.apache.maven</groupId>
-                <artifactId>maven-core</artifactId>
-                <version>${version.apache.maven}</version>
+                <artifactId>maven-plugin-api</artifactId>
+                <version>${version.maven.api}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven</groupId>
-                <artifactId>maven-plugin-api</artifactId>
-                <version>${version.apache.maven}</version>
+                <artifactId>maven-core</artifactId>
+                <version>${version.maven.api}</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven.plugin-tools</groupId>
                 <artifactId>maven-plugin-annotations</artifactId>
-                <version>${version.maven-plugin-plugin}</version>
+                <version>${version.maven.plugin-tools}</version>
                 <scope>provided</scope>
             </dependency>
         </dependencies>
@@ -122,11 +118,6 @@
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>kr.motd.maven</groupId>
-                    <artifactId>os-maven-plugin</artifactId>
-                    <version>${version.os.maven-plugin}</version>
-                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
@@ -166,17 +157,10 @@
                             <goals>
                                 <goal>sign</goal>
                             </goals>
-                            <configuration>
-                                <keyname>${infinispan.gpg.key}</keyname>
-                                <passphraseServerId>${infinispan.gpg.key}</passphraseServerId>
-                                <gpgArguments>
-                                    <arg>--pinentry-mode</arg>
-                                    <arg>loopback</arg>
-                                </gpgArguments>
-                            </configuration>
                         </execution>
                     </executions>
                 </plugin>
+
                 <plugin>
                     <artifactId>maven-scm-plugin</artifactId>
                     <version>${version.maven.scm-plugin}</version>
@@ -187,7 +171,16 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-plugin-plugin</artifactId>
-                    <version>${version.maven-plugin-plugin}</version>
+                    <version>${version.maven.plugin-tools}</version>
+                    <executions>
+                        <execution>
+                            <id>help-mojo</id>
+                            <goals>
+                                <!-- good practice is to generate help mojo for plugin -->
+                                <goal>helpmojo</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.sonatype.plugins</groupId>
