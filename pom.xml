@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.infinispan.maven-plugins</groupId>
     <artifactId>infinispan-plugins-parent</artifactId>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.5.Final</version>
     <packaging>pom</packaging>
     <name>Parent</name>
     <description>Infinispan Maven Plugins Parent POM</description>
