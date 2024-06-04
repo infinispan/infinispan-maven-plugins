@@ -48,7 +48,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <version.jackson-databind>2.16.2</version.jackson-databind>
-        <version.javaparser>3.5.17</version.javaparser>
+        <version.javaparser>3.26.0</version.javaparser>
         <version.maven.api>3.6.1</version.maven.api>
         <version.maven.gpg>3.2.4</version.maven.gpg>
         <version.maven.javadoc>3.6.3</version.maven.javadoc>
