@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.NodeList;
@@ -27,8 +28,8 @@ import com.github.javaparser.ast.body.VariableDeclarator;
 public class Parser {
    private final List<File> sourceDirectories;
    private final Consumer<String> debug;
-   private Set<File> processedFiles = new HashSet<>();
-   private Grammar grammar = new Grammar();
+   private final Set<File> processedFiles = new HashSet<>();
+   private final Grammar grammar = new Grammar();
 
    public Parser(Consumer<String> debug, List<File> sourceDirectories) {
       this.debug = debug;
@@ -158,11 +159,11 @@ public class Parser {
 
    private void addIntrinsics(ParseContext ctx, String className, ClassOrInterfaceDeclaration clazz) {
       for (MethodDeclaration m : clazz.getMethods()) {
-         if (!m.getModifiers().contains(Modifier.STATIC)) {
+         if (!m.getModifiers().contains(Modifier.staticModifier())) {
             continue;
          }
          NodeList<Parameter> parameterTypes = m.getParameters();
-         if (parameterTypes.size() < 1 || !"ByteBuf".equals(parameterTypes.get(0).getTypeAsString())) {
+         if (parameterTypes.isEmpty() || !"ByteBuf".equals(parameterTypes.get(0).getTypeAsString())) {
             continue;
          }
          if (ctx.ns == null) {
@@ -185,19 +186,24 @@ public class Parser {
                debug.accept("Looking up file " + file);
                return file.exists() && file.isFile();
             }).findFirst();
-      if (!classFile.isPresent()) {
+      if (classFile.isEmpty()) {
          throw ctx.fail("Cannot find " + className + " in any of " + sourceDirectories);
       }
       try {
-         CompilationUnit compilationUnit = JavaParser.parse(classFile.get());
          int dotIndex = className.lastIndexOf('.');
          String simpleName = dotIndex < 0 ? className : className.substring(dotIndex + 1);
-
-         Optional<ClassOrInterfaceDeclaration> classByName = compilationUnit.getClassByName(simpleName);
-         if (!classByName.isPresent()) {
-            classByName = compilationUnit.getInterfaceByName(simpleName);
+         JavaParser javaParser = new JavaParser();
+         ParseResult<CompilationUnit> result = javaParser.parse(classFile.get());
+         if (result.isSuccessful()) {
+            CompilationUnit compilationUnit = result.getResult().get();
+            Optional<ClassOrInterfaceDeclaration> classByName = compilationUnit.getClassByName(simpleName);
+            if (classByName.isEmpty()) {
+               classByName = compilationUnit.getInterfaceByName(simpleName);
+            }
+            return classByName.orElseThrow(() -> ctx.fail("Cannot find class " + className + " in " + classFile.get()));
+         } else {
+            throw new RuntimeException(String.valueOf(result.getProblems()));
          }
-         return classByName.orElseThrow(() -> ctx.fail("Cannot find class " + className + " in " + classFile.get()));
       } catch (FileNotFoundException e) {
          throw ctx.fail("Cannot parse file " + classFile);
       }
