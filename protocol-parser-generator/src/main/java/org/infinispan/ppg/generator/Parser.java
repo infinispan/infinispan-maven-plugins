@@ -420,6 +420,7 @@ public class Parser {
                      params.add(new Action(ctx.ns, tokens, ctx.file, ctx.line));
                      tokens = new ArrayList<>();
                   } else tokens.add(token);
+                  break;
                case "[":
                   ++level;
                   // no break;
