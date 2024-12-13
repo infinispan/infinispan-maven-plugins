@@ -87,7 +87,11 @@ public class Machine {
       if (exceptionally == null) {
          sb.append("\t\t\tthrow t;\n");
       } else {
-         sb.append("\t\t\texceptionally(t);\n");
+         sb.append("\t\t\texceptionally(");
+         if (passContext) {
+            sb.append("ctx, ");
+         }
+         sb.append("t);\n");
       }
       sb.append("\t\t} finally {\n");
       sb.append("\t\t\trequestBytes += buf.readerIndex() - pos;\n");
@@ -125,7 +129,11 @@ public class Machine {
       }
       sb.append("\t}\n\n");
       if (exceptionally != null) {
-         sb.append("\tprivate void exceptionally(Throwable t) throws Exception {\n");
+         sb.append("\tprivate void exceptionally(");
+         if (passContext) {
+            sb.append("ChannelHandlerContext ctx, ");
+         }
+         sb.append("Throwable t) throws Exception {\n");
          sb.append(prettyPrint(exceptionally, 2)).append("\n");
          sb.append("\t}\n\n");
       }
