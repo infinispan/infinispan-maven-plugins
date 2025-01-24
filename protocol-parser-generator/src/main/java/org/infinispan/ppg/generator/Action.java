@@ -88,9 +88,13 @@ class Action implements Element {
          if (requiresSpace) {
             sb.append(' ');
          }
-         if (Character.isLetter(firstChar) || firstChar == '@') {
+         boolean reservedWord = switch (item) {
+            case "boolean", "byte", "char", "double", "float", "int", "long", "short" -> true;
+            default -> false;
+         };
+         if (!reservedWord && Character.isLetter(firstChar) || firstChar == '@') {
             requiresSpace = true;
-            // TODO omit java keywords?
+
             Resolvable resolvable = grammar.qualified.get(item);
             if (resolvable != null) {
                sb.append(resolvable.sourceName());
